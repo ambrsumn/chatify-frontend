@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.chat-bubble {
+  background-color:#E6F8F1;
+  padding:8px 14px;
+  -webkit-border-radius: 20px;
+  -webkit-border-bottom-left-radius: 2px;
+  -moz-border-radius: 20px;
+  -moz-border-radius-bottomleft: 2px;
+  border-radius: 20px;
+  border-bottom-left-radius: 2px;
+  display:inline-block;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.typing {
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  display: flex;
+  height: 8px;
+}
+.typing .dot {
+  animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
+  background-color: #6CAD96 ; 
+  border-radius: 50%;
+  height: 7px;
+  margin-right: 4px;
+  vertical-align: middle;
+  width: 7px;
+  display: inline-block;
+}
+.typing .dot:nth-child(1) {
+  animation-delay: 200ms;
+}
+.typing .dot:nth-child(2) {
+  animation-delay: 300ms;
+}
+.typing .dot:nth-child(3) {
+  animation-delay: 400ms;
+}
+.typing .dot:last-child {
+  margin-right: 0;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes mercuryTypingAnimation {
+  0% {
+    transform: translateY(0px);
+    background-color:#6CAD96; 
   }
-  to {
-    transform: rotate(360deg);
+  28% {
+    transform: translateY(-7px);
+    background-color:#9ECAB9; 
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #B5D9CB; 
   }
 }
