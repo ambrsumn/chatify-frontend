@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useUser } from '../context/UserContext';
-import { Dialog } from '@mui/material';
+import { Button, Dialog, TextField } from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import axios from 'axios';
 
 function RegisterPage({ handleClose }) {
 
@@ -8,11 +10,10 @@ function RegisterPage({ handleClose }) {
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
     const { apiHost, saveToken } = useUser();
-    const [open, setOpen] = useState(false);
 
 
 
-    const login = () => {
+    const signUp = () => {
         // // console.log(apiHost);
         // // console.log(email);
         // // console.log(password);
@@ -26,21 +27,13 @@ function RegisterPage({ handleClose }) {
         axios.post(`${apiHost}user/register`, data).then((res) => {
             // // console.log(res);
             if (res.data.message === 'OTP sent successfully') {
-                // // console.log(res.data.message);
-                return;
+                handleClose('otp sent', data);
             }
 
-
         }).catch((err) => {
-            // // console.log(err);
+            console.log(err);
         });
 
-    }
-
-    const handleCloseVerify = (data) => {
-        setOpen(false);
-        handleClose();
-        // // console.log(data);
     }
 
     return (
@@ -56,15 +49,11 @@ function RegisterPage({ handleClose }) {
                         <TextField id="outlined-basic" label="Password" onChange={(e) => { setPassword(e.target.value) }} variant="outlined" type="password" />
                     </div>
 
-                    <Button className='' variant="contained" onClick={login}>Login</Button>
+                    <Button className='' variant="contained" onClick={signUp}>Register</Button>
                 </form>
 
-                <p>Don't have an account yet? <button className=' text-blue-700 mt-4 underline' onClick={() => { handleClose('signUp') }}>SIGN UP</button></p>
+                <p>Don't have an account yet? <button className=' text-blue-700 mt-4 underline' onClick={() => { handleClose('logged out') }}>SIGN UP</button></p>
             </div>
-
-            <>
-                <Dialog open={openVerifyDialog}></Dialog>
-            </>
         </>
     )
 }

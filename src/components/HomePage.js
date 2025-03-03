@@ -6,6 +6,9 @@ import LoginPage from './LoginPage';
 import { useUser } from '../context/UserContext';
 import ChatBox from './ChatBox';
 import { io } from 'socket.io-client';
+import CreateGroupDialog from './CreateGroupDialog';
+import RegisterPage from './RegisterPage';
+import VerificationDialog from './VerificationDialog';
 
 
 function HomePage() {
@@ -15,6 +18,9 @@ function HomePage() {
     const [openLogin, setOpenLogin] = useState(null);
     const [openSignup, setOpenSignup] = useState(false);
     const [person, setPerson] = useState({});
+    const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
+    const [openVerificationModal, setOpenVerificationModal] = useState(false);
+    const [userSignUpData, setUserSignUpData] = useState({});
 
     const socket = useMemo(() => {
         // console.log(token, 'hhhh');
@@ -41,7 +47,11 @@ function HomePage() {
             setOpenLogin(false);
         }
         else {
-            setOpenLogin(true);
+            console.log('not logged in');
+            if (!openVerificationModal && !openSignup) {
+
+                setOpenLogin(true);
+            }
         }
 
 
@@ -58,21 +68,37 @@ function HomePage() {
         setPerson(person);
     }
 
-    const handleCloseLogin = (data) => {
-        // // console.log(data);
+    const handleCloseLogin = (message, data) => {
+        console.log(message);
         setOpenLogin(false);
+        setOpenSignup(false);
+        setOpenVerificationModal(false);
         // // console.log(data);
 
-        if (data === 'Sign up') {
+        if (message === 'signUp') {
+            // console.log('sign up');
             setOpenSignup(true);
         }
 
-        if (data === 'logged out') {
+        if (message === 'logged out') {
             setOpenLogin(true);
+        }
+
+        if (message === 'otp sent') {
+            console.log(data);
+            setUserSignUpData(data);
+            setOpenVerificationModal(true);
         }
     }
 
+    const handleCloseCreateGroup = () => {
+        setOpenCreateGroupModal(false);
+    }
 
+    const handleOpenCreateGroup = () => {
+        console.log('create group');
+        setOpenCreateGroupModal(true);
+    }
 
     return (
         <>
@@ -81,7 +107,7 @@ function HomePage() {
                     loggedIn &&
                     <>
                         <div className='flex flex-row gap-x-6 h-full w-full'>
-                            <div className=' w-[5%] h-full'><Sidebar closeLogin={handleCloseLogin} ></Sidebar></div>
+                            <div className=' w-[5%] h-full'><Sidebar createGroup={handleOpenCreateGroup} closeLogin={handleCloseLogin} ></Sidebar></div>
                             <div className=' w-[30%] h-full'><SearchWindow openChat={openChat} userDetails={userData} ></SearchWindow></div>
                             <div className=' w-[70%] h-full'><ChatBox socket={socket} receipent={person} sendMessage={handleMessages}></ChatBox> </div>
                         </div>
@@ -93,6 +119,31 @@ function HomePage() {
                 <Dialog open={openLogin} onClose={handleCloseLogin}>
                     <DialogContent>
                         <LoginPage handleClose={handleCloseLogin} />
+                    </DialogContent>
+                </Dialog>
+            </>
+
+            <>
+                <Dialog open={openSignup} onClose={handleCloseLogin}>
+                    <DialogContent>
+                        <RegisterPage handleClose={handleCloseLogin} />
+                    </DialogContent>
+                </Dialog>
+            </>
+
+            <>
+                <Dialog open={openVerificationModal} onClose={handleCloseLogin}>
+                    <DialogContent>
+                        <VerificationDialog userData={userSignUpData} handleClose={handleCloseLogin} />
+                    </DialogContent>
+                </Dialog>
+            </>
+
+
+            <>
+                <Dialog open={openCreateGroupModal} onClose={handleCloseLogin}>
+                    <DialogContent>
+                        <CreateGroupDialog handleClose={handleCloseCreateGroup} />
                     </DialogContent>
                 </Dialog>
             </>

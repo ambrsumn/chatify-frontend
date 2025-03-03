@@ -3,16 +3,18 @@ import HomeIcon from '@mui/icons-material/Home';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import axios from 'axios'
 import { useUser } from '../context/UserContext'
 
 
 
-function Sidebar({ closeLogin }) {
+function Sidebar({ closeLogin, createGroup }) {
 
     const [icon, setIcon] = useState("");
     const { apiHost, saveToken, token, userDetails, saveUserDetails, saveLogin } = useUser();
     const [email, setEmail] = useState('');
+
 
     useEffect(() => {
         // // console.log(userDetails);
@@ -97,6 +99,7 @@ function Sidebar({ closeLogin }) {
                     <button><HomeIcon className=' text-white hover:text-black' /></button>
                     <button> <NotificationsIcon className=' text-white hover:text-black' /></button>
                     <button> <SettingsIcon className=' text-white hover:text-black' /></button>
+                    <button onClick={createGroup}> <GroupAddIcon className=' text-white hover:text-black' /></button>
                 </div>
 
             </div>
