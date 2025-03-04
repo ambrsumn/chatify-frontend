@@ -3,6 +3,7 @@ import { Button, TextField } from '@mui/material'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useUser } from '../context/UserContext';
 import axios from 'axios';
+import RingLoader from "react-spinners/RingLoader";
 
 function LoginPage({ handleClose }) {
 
@@ -11,12 +12,11 @@ function LoginPage({ handleClose }) {
     const [name, setName] = useState("");
     const { token, saveToken, apiHost, saveUserDetails, saveLogin, userDetails, loggedIn } = useUser();
     const [returnData, setReturnData] = useState();
+    const [openLoader, setOpenLoader] = useState(false);
 
 
     const login = () => {
-        // // console.log(apiHost);
-        // // console.log(email);
-        // // console.log(password);
+        setOpenLoader(true);
 
         let data = {
             email: email,
@@ -43,9 +43,10 @@ function LoginPage({ handleClose }) {
             let returner = res.data.userDetails;
             returner.token = res.data.token;
             setReturnData(returner);
-
+            setOpenLoader(false);
             handleClose(returner);
         }).catch((err) => {
+            setOpenLoader(false);
             // // console.log(err);
         });
 
@@ -53,20 +54,34 @@ function LoginPage({ handleClose }) {
 
     return (
         <div className=' w-full px-6'>
-            <p className=' text-center text-lg font-medium'>Welcome back..</p>
-            <div className=' flex flex-row justify-end'><button onClick={handleClose}><CloseOutlinedIcon className=' text-red-600' /> </button></div>
-            <form>
 
-                <div className=' flex flex-col gap-y-6 mb-4'>
-                    {/* <TextField id="outlined-basic" label="Full Name" variant="outlined" /> */}
-                    <TextField className="outlined-basic" onChange={(e) => { setEmail(e.target.value) }} label="Email Id" variant="outlined" />
-                    <TextField className="outlined-basic" label="Password" onChange={(e) => { setPassword(e.target.value) }} variant="outlined" type="password" />
-                </div>
+            {
+                !openLoader &&
+                <>
+                    <p className=' text-center text-lg font-medium'>Welcome back..</p>
+                    <div className=' flex flex-row justify-end'><button onClick={handleClose}><CloseOutlinedIcon className=' text-red-600' /> </button></div>
+                    <form>
 
-                <Button className='' variant="contained" onClick={login}>Login</Button>
-            </form>
+                        <div className=' flex flex-col gap-y-6 mb-4'>
+                            {/* <TextField id="outlined-basic" label="Full Name" variant="outlined" /> */}
+                            <TextField className="outlined-basic" onChange={(e) => { setEmail(e.target.value) }} label="Email Id" variant="outlined" />
+                            <TextField className="outlined-basic" label="Password" onChange={(e) => { setPassword(e.target.value) }} variant="outlined" type="password" />
+                        </div>
 
-            <p>Don't have an account yet? <button className=' text-blue-700 mt-4 underline' onClick={() => { handleClose('signUp') }}>SIGN UP</button></p>
+                        <Button className='' variant="contained" onClick={login}>Login</Button>
+                    </form>
+
+                    <p>Don't have an account yet? <button className=' text-blue-700 mt-4 underline' onClick={() => { handleClose('signUp') }}>SIGN UP</button></p>
+                </>
+            }
+
+            <RingLoader
+                color="#6E00FF"
+                loading={openLoader}
+                size={50}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+            />
         </div>
     )
 }
