@@ -21,6 +21,7 @@ function HomePage() {
     const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
     const [openVerificationModal, setOpenVerificationModal] = useState(false);
     const [userSignUpData, setUserSignUpData] = useState({});
+    const [refreshSidebarr, setRefreshSidebar] = useState(false);
 
     const socket = useMemo(() => {
         // console.log(token, 'hhhh');
@@ -93,6 +94,7 @@ function HomePage() {
 
     const handleCloseCreateGroup = () => {
         setOpenCreateGroupModal(false);
+        setRefreshSidebar(!refreshSidebarr);
     }
 
     const handleOpenCreateGroup = () => {
@@ -108,7 +110,7 @@ function HomePage() {
                     <>
                         <div className='flex flex-row gap-x-6 h-full w-full'>
                             <div className=' w-[5%] h-full'><Sidebar createGroup={handleOpenCreateGroup} closeLogin={handleCloseLogin} ></Sidebar></div>
-                            <div className=' w-[30%] h-full'><SearchWindow openChat={openChat} userDetails={userData} ></SearchWindow></div>
+                            <div className=' w-[30%] h-full'><SearchWindow refresh={refreshSidebarr} openChat={openChat} userDetails={userData} ></SearchWindow></div>
                             <div className=' w-[70%] h-full'><ChatBox socket={socket} receipent={person} sendMessage={handleMessages}></ChatBox> </div>
                         </div>
                     </>

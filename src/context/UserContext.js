@@ -6,7 +6,7 @@ export const UserProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
-    // const [apiHost, setApiHost] = useState('https://infra-track-backend.vercel.app/');
+    // const [apiHost, setApiHost] = useState('https://chatify-backend-hazel.vercel.app/');
     const [apiHost, setApiHost] = useState('http://localhost:8080/');
 
     const saveToken = (token) => {

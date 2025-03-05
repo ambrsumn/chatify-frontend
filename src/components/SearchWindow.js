@@ -3,13 +3,14 @@ import searchIcon from '../assets/search.png'
 import { useUser } from '../context/UserContext';
 import axios from 'axios';
 
-function SearchWindow({ userDetails, openChat }) {
+function SearchWindow({ userDetails, openChat, refresh }) {
 
     const [people, setPeople] = useState([]);
     const { token, saveToken, apiHost, saveUserDetails, saveLogin } = useUser();
 
 
     useEffect(() => {
+        console.log("SEARCH WINDOW");
         // // // console.log(apiHost, token);
         let headers = {
             'Authorization': `Bearer ${token}`,
@@ -25,7 +26,7 @@ function SearchWindow({ userDetails, openChat }) {
         });
 
 
-    }, []);
+    }, [refresh]);
 
 
 
